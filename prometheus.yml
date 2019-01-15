@@ -1,0 +1,61 @@
+global:
+  scrape_interval: 15s
+  scrape_timeout: 10s
+  evaluation_interval: 15s
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets:
+      - prom01:9093
+      labels:
+        instance: 'prom01'
+rule_files:
+- /etc/alertRules.rules
+scrape_configs:
+- job_name: prometheus
+  scrape_interval: 15s
+  scrape_timeout: 10s
+  metrics_path: /metrics
+  scheme: http
+  static_configs:
+  - targets:
+    - prom01:9090
+    labels:
+      env: prometheus
+      instance: prom01
+      tech: prometheus
+- job_name: alertmanager
+  scrape_interval: 15s
+  scrape_timeout: 10s
+  metrics_path: /metrics
+  scheme: http
+  static_configs:
+  - targets:
+    - prom01:9093
+    labels:
+      env: prometheus
+      instance: prom01
+      tech: prometheus
+- job_name: node_exporter_dev
+  scrape_interval: 30s
+  scrape_timeout: 10s
+  metrics_path: /metrics
+  scheme: http
+  static_configs:
+  - targets:
+    - prom01:9100
+    labels:
+      env: non-prod
+      instance: prom01
+      host: prom01
+      tech: prom01
+      port: 9100
+  - targets:
+    - prom01:9100
+    labels:
+      env: non-prod
+      instance: prom01
+      tech: prometheus
+      host: prom01
+      port: 9100
+  

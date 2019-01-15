@@ -1,0 +1,28 @@
+global:
+  resolve_timeout: 5m
+  smtp_smarthost: "smtp.office365.com:587"
+  smtp_from: "someemailaddress"
+
+route:
+  group_by: ['alertname','env','tech','instance']
+  repeat_interval: 15m
+  receiver: DB_OPS
+
+inhibit_rules:
+- source_match:
+    severity: Critical
+  target_match:
+    severity: Warning
+  equal: ['alertname','env','tech','instance']
+
+receivers:
+- name: 'DB_OPS'
+  email_configs:
+  - to: "someemailaddress"
+    from: "someemailaddress"
+    smarthost: "smtphost"
+    auth_username: "emailaddresstoauthenticateemail"
+    auth_password: "inputpasswordhere"
+    auth_identity: "emailaddresstoauthenticate"
+    require_tls: true
+    send_resolved: false
